@@ -122,4 +122,5 @@ class Home(webapp2.RequestHandler):
   def get(self):
     if users.get_current_user() and not self.request.get('about')=='t':
       self.redirect('/User')
-    self.response.out.write(loader.get_template('base.html').render(Context({})))
+    else:
+      self.response.out.write(loader.get_template('base.html').render(Context({})))
