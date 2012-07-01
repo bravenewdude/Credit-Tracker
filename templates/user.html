@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<p id="top"><a href="/?about=t">About</a> | <a href="#" onclick="return Delete();">Delete Account</a></p>
+    <div id="info">Hello <a href="#" id="rewarder" onclick="return Email($(this), 'email');">{{ userinfo.email }}</a><br />CREDITS: <span id="numcredits"></span></p></div>
+    <div class="container">
+      <div id="today">
+        <h3>Today is {{ date.date }}</h3>
+        <p><input type="checkbox" id="exercise" onchange="Exercise();" /> Exercised today.</p>
+        <p><span id="minutestoday">{{ userinfo.minutestoday }}</span> minutes spent working today.<p>
+        <form>
+          <label>Add Time (minutes): </label>
+          <input type="text" name="minutes" id="minutes" autofocus required />
+          <input type="submit" id="submit" value="Submit" onclick="return Minutes();" />
+        </form>
+      </div>
+      <div id="rewards">
+        <table id="rewardtable">
+          <tr><th>Reward (click to purchase)</th><th>Price</th><th></th></tr>
+          {% for reward, price in rewards %}<tr class="{% cycle 'rowodd' 'roweven' %}"><td><a href="#" onclick="return Purchase('{{ reward }}', '{{ price }}');">{{ reward }}</a></td><td>{{ price }}</td><td><a href="#" onclick="return Reward({{ forloop.counter0 }}, '{{ reward }}');">x</a></td></tr>{% endfor %}
+          <form><tr><th><input type="text" name="newreward" id="newreward" required /></th><th><input type="text" name="newprice" id="newprice" required /></th><th><input type="submit" id="rewardbutton" value="Add" onclick="return Reward('a');" /></th></tr></form>
+        </table>
+        <form>
+          <label>OR Donate Credits: </label>
+          <input type="text" name="donate" id="donate" required />
+          <input type="submit" id="donatebutton" value="Donate" onclick="return Purchase('__donate__');" />
+        </form>
+        <p>Rewarder: <a href="#" id="rewarder" onclick="return Email($(this), 'rewarder');">{{ userinfo.rewarder }}</a></p>
+      </div>
+    </div>
+    <p id="message"></p>
+    <img src="images/ajaxloadersmall.gif" class="hidden" alt="bug fix" />
+    <script>
+      var userid = "{{ userid }}"
+      var minutes = {{ userinfo.minutes }};
+      var minutestoday = {{ userinfo.minutestoday }};
+      var credits = parseInt(minutes/60);
+      $(document).ready(
+        function() {
+          $('#numcredits').text(credits);
+          $('#exercise').attr('checked', {{ userinfo.exercisetoday|lower }});
+          setTimeout("location.reload(true);",7200000);
+        }
+      );
+    </script>
+    <script src="js/main.js"></script>
+{% endblock %}
