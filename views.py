@@ -87,7 +87,8 @@ class User(webapp2.RequestHandler):
   def get(self):
     if not users.get_current_user():
       self.redirect(users.create_login_url(self.request.uri))
-    self.response.out.write(loader.get_template('user.html').render(UserContext()))
+    else:
+      self.response.out.write(loader.get_template('user.html').render(UserContext()))
   def post(self):
     userinfo = UserInfo.get_by_key_name(self.request.get('userid'))
     self.response.out.write(Purchase(userinfo,self.request))
